@@ -7,7 +7,9 @@ const int INFO = 1;
 const int WARN = 2;
 const int ERROR = 3;
 
-const int DEBUG_LEVEL = INFO;
+// Debug output goes to the same serial port as the monome protocol and
+// corrupts it, so it is disabled by default. Set to INFO to enable.
+const int DEBUG_LEVEL = ERROR + 1;
 
 void debug(int level, const char *message);
 void debug(int level, String message);

@@ -79,7 +79,7 @@ class MonomeSerialDevice : public MonomeEventQueue {
         uint8_t encoders;
         uint8_t gridX;
         uint8_t gridY;
-        uint8_t defaultIntensity;
+        uint8_t globalIntensity;   // 0-15, set by /grid/led/intensity
 
         static const int variMonoThresh = 0;
         static const int MAXLEDCOUNT = 256;
@@ -92,6 +92,8 @@ class MonomeSerialDevice : public MonomeEventQueue {
         
 //        MonomeSerialDevice();
         void processSerial();
+        uint8_t readByte();
+        void readLevels(uint8_t *levels, uint8_t count);
 };
 
 #endif

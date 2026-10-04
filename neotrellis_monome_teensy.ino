@@ -31,7 +31,7 @@
 //  amber? {255,191,0}
 //  warmer white? {255,255,200}
 
-// set your monome device name here
+// set your monome device name here - give each grid its own name if you use several
 String deviceID = "neo-monome";
 
 // DEVICE INFO FOR ADAFRUIT M0 or M4
@@ -190,16 +190,20 @@ void setup(){
 // ***************************************************************************
 
 void sendLeds(){
+  static uint8_t prevIntensity = 15;
   uint8_t value, prevValue = 0;
   uint32_t hexColor;
   bool isDirty = false;
+  // a new intensity changes the brightness of every led
+  bool intensityChanged = mdp.globalIntensity != prevIntensity;
+  prevIntensity = mdp.globalIntensity;
 
   for(int i=0; i< NUM_ROWS * NUM_COLS; i++){ 
     value = mdp.leds[i];
     prevValue = prevLedBuffer[i];
-    uint8_t gvalue = gammaTable[value];
+    uint8_t gvalue = (gammaTable[value] * (mdp.globalIntensity + 1)) / 16;
 
-    if (value != prevValue) {
+    if (value != prevValue || intensityChanged) {
       //hexColor = (((R * value) >> 4) << 16) + (((G * value) >> 4) << 8) + ((B * value) >> 4);
       hexColor =  (((gvalue*R)/256) << 16) + (((gvalue*G)/256) << 8) + (((gvalue*B)/256) << 0);
       trellis.setPixelColor(i, hexColor);
